@@ -12,5 +12,5 @@ jobs:
     - name: generate
       run: |
             docker run --rm dockcross/windows-shared-x86 > ./xcross; chmod +x ./xcross; sudo mv ./xcross /usr/bin/
-            xcross bash -c "export PATH=/usr/src/mxe/usr/bin/i686-w64-mingw32.shared-gcc:$PATH && yes yes | ./configure && make || true"
+            xcross bash -c "export PATH=/usr/src/mxe/usr/bin/i686-w64-mingw32.shared-gcc:$PATH && yes yes | make || true"
             ls -la 
