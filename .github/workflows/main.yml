@@ -5,12 +5,22 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
-
+    runs-on: windows-latest
+    env:
+      MSYS2_ARCH: i686
     steps:
-    - uses: actions/checkout@v2
-    - name: generate
-      run: |
-            docker run --rm dockcross/windows-shared-x86 > ./xcross; chmod +x ./xcross; sudo mv ./xcross /usr/bin/
-            xcross bash -c "export PATH=/usr/src/mxe/usr/bin/i686-w64-mingw32.shared-gcc:$PATH && yes yes | make || true"
-            ls -la 
+    - uses: actions/checkout@v1
+    - uses: eine/setup-msys2@v0      
+      with:
+        update: true
+        msystem: MINGW32
+                
+    - name: Install MSYS2 Dependencies
+      run:  msys2do pacman --noconfirm -S --needed mingw-w64-i686-gcc mingw-w64-i686-libsamplerate make
+    - name: make
+      run:  msys2do make
+       
+    - uses: actions/upload-artifact@v1
+      with:
+          name: artifact
+          path: .
